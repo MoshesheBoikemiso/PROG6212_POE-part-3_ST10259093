@@ -4,15 +4,18 @@
 
 <div class="row justify-content-center mt-5">
     <div class="col-md-4">
-        <h2 class="text-center">CMCS Login</h2>
-        <form>
+        <h2 class="text-center">Login to CMCS</h2>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <form method="post" action="@Url.Action("Login", "Home")">
             <div class="form-group mb-3">
                 <label for="email">Email Address</label>
-                <input type="email" class="form-control" id="email" placeholder="name@example.com">
-            </div>
-            <div class="form-group mb-3">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                <small class="form-text text-muted">Use: lecturer@email.com, coordinator@email.com, or manager@email.com</small>
             </div>
             <button type="submit" class="btn btn-primary w-100">Login</button>
         </form>

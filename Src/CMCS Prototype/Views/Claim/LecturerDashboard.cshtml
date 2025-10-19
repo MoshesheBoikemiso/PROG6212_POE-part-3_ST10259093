@@ -1,0 +1,78 @@
+﻿@model List<CMCS_Prototype.Models.Claim>
+@{
+    ViewData["Title"] = "Lecturer Dashboard";
+}
+
+<div class="container">
+    <h2>Welcome, @ViewBag.UserName!</h2>
+    <p class="lead">This is your dashboard to manage monthly claims.</p>
+
+    <div class="mb-4">
+        <a href="@Url.Action("Create", "Claim")" class="btn btn-success">
+            + Submit New Claim
+        </a>
+    </div>
+
+    <h4>Your Claim History</h4>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Claim Month</th>
+                    <th>Total Hours</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Submission Date</th>
+                    <th>Documents</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var claim in Model)
+                {
+                    <tr>
+                        <td>@claim.ClaimMonth.ToString("MMMM yyyy")</td>
+                        <td>@claim.TotalHours.ToString("N1")</td>
+                        <td>R @claim.TotalAmount.ToString("N2")</td>
+                        <td>
+                            @if (claim.Status == "Approved")
+                            {
+                                <span class="badge bg-success">@claim.Status</span>
+                            }
+                            else if (claim.Status == "Rejected")
+                            {
+                                <span class="badge bg-danger">@claim.Status</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">@claim.Status</span>
+                            }
+                        </td>
+                        <td>@claim.DateSubmissions.ToString("dd MMM yyyy")</td>
+                        <td>
+                            @if (claim.Documents != null && claim.Documents.Any())
+                            {
+                                <span class="badge bg-info">@claim.Documents.Count documents</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No documents</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <p>You haven't submitted any claims yet. Click "Submit New Claim" to get started!</p>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a href="@Url.Action("Logout", "Home")" class="btn btn-secondary">Logout</a>
+    </div>
+</div>
