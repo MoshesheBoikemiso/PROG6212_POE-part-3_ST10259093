@@ -4,7 +4,7 @@ using CMCS_Prototype.Data;
 using CMCS_Prototype.Models;
 
 namespace CMCS_Prototype.Controllers
-{
+{ // Handles claim submission and file upload functionality
     public class ClaimController : Controller
     {
         private readonly ApplicationDbContext _context;
