@@ -4,7 +4,7 @@ using CMCS_Prototype.Data;
 using CMCS_Prototype.Models;
 
 namespace CMCS_Prototype.Controllers
-{
+{ //Handles the approval and rejection workflow for coordinators and managers  
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
