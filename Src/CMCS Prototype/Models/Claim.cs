@@ -15,16 +15,10 @@ namespace CMCS_Prototype.Models
 
         [Required]
         [Display(Name = "Total Hours")]
-        [Range(0.1, 744, ErrorMessage = "Hours must be between 0.1 and 744")]
         public decimal TotalHours { get; set; }
 
         [Required]
-        [Display(Name = "Hourly Rate (R)")]
-        [Range(1, 1000, ErrorMessage = "Hourly rate must be between R1 and R1000")]
-        public decimal HourlyRate { get; set; } = 180; // Default rate
-
-        [Required]
-        [Display(Name = "Total Amount (R)")]
+        [Display(Name = "Total Amount")]
         public decimal TotalAmount { get; set; }
 
         public string Status { get; set; } = "Submitted";
@@ -40,11 +34,5 @@ namespace CMCS_Prototype.Models
         public User User { get; set; }
 
         public List<Document> Documents { get; set; } = new List<Document>();
-
-         
-        public void CalculateTotalAmount()
-        {
-            TotalAmount = TotalHours * HourlyRate;
-        }
     }
 }
