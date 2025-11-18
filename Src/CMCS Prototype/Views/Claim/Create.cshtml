@@ -11,7 +11,7 @@
     }
     <div class="row">
         <div class="col-md-8">
-            <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <form asp-action="Create" method="post" enctype="multipart/form-data" id="claimForm">
                 <div class="form-group mb-3">
                     <label asp-for="ClaimMonth" class="control-label">Claim Month</label>
                     <input asp-for="ClaimMonth" type="month" class="form-control" />
@@ -20,15 +20,21 @@
 
                 <div class="form-group mb-3">
                     <label asp-for="TotalHours" class="control-label">Total Hours Worked</label>
-                    <input asp-for="TotalHours" type="number" step="0.1" class="form-control" />
+                    <input asp-for="TotalHours" type="number" step="0.1" class="form-control" id="totalHours" />
                     <span asp-validation-for="TotalHours" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
+                    <label asp-for="HourlyRate" class="control-label">Hourly Rate (R)</label>
+                    <input asp-for="HourlyRate" type="number" step="0.01" class="form-control" id="hourlyRate" />
+                    <span asp-validation-for="HourlyRate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
                     <label asp-for="TotalAmount" class="control-label">Total Amount (R)</label>
-                    <input asp-for="TotalAmount" type="number" step="0.01" class="form-control" />
+                    <input asp-for="TotalAmount" type="number" step="0.01" class="form-control" id="totalAmount" readonly />
                     <span asp-validation-for="TotalAmount" class="text-danger"></span>
-                    <small class="form-text text-muted">Leave blank to calculate automatically (Hours × R180/hour)</small>
+                    <small class="form-text text-muted">This amount is automatically calculated based on hours and rate</small>
                 </div>
 
                 <div class="form-group mb-3">
@@ -53,6 +59,15 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
+                    <h5 class="card-title">Claim Summary</h5>
+                    <div id="calculationPreview">
+                        <p class="text-muted">Enter hours and rate to see calculation</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
                     <h5 class="card-title">Tips for Submitting Claims</h5>
                     <ul>
                         <li>Select the correct month for your claim</li>
@@ -72,14 +87,84 @@
     }
 
     <script>
-        document.getElementById('TotalHours').addEventListener('input', function() {
-            const hours = parseFloat(this.value);
-            const amountField = document.getElementById('TotalAmount');
+        $(document).ready(function () {
+            $('#totalHours, #hourlyRate').on('input', calculateTotal);
 
-            if (hours > 0 && (!amountField.value || amountField.value == 0)) {
-                const calculatedAmount = hours * 180;
-                amountField.value = calculatedAmount.toFixed(2);
+            function calculateTotal() {
+                const hours = parseFloat($('#totalHours').val()) || 0;
+                const rate = parseFloat($('#hourlyRate').val()) || 0;
+                const total = hours * rate;
+
+                $('#totalAmount').val(total.toFixed(2));
+
+                updateCalculationPreview(hours, rate, total);
+
+                validateInputs();
             }
+
+            function updateCalculationPreview(hours, rate, total) {
+                const preview = $('#calculationPreview');
+
+                if (hours > 0 && rate > 0) {
+                    preview.html(`
+                        <p><strong>Calculation:</strong></p>
+                        <p>${hours} hours × R${rate.toFixed(2)}/hour</p>
+                        <p><strong>Total: R${total.toFixed(2)}</strong></p>
+                    `);
+                } else {
+                    preview.html('<p class="text-muted">Enter hours and rate to see calculation</p>');
+                }
+            }
+
+            function validateInputs() {
+                const hours = parseFloat($('#totalHours').val());
+                const rate = parseFloat($('#hourlyRate').val());
+
+                if (hours < 0.1 || hours > 744) {
+                    $('#totalHours').addClass('is-invalid');
+                } else {
+                    $('#totalHours').removeClass('is-invalid');
+                }
+
+                if (rate < 1 || rate > 1000) {
+                    $('#hourlyRate').addClass('is-invalid');
+                } else {
+                    $('#hourlyRate').removeClass('is-invalid');
+                }
+            }
+
+            $('#claimForm').on('submit', function (e) {
+                const hours = parseFloat($('#totalHours').val());
+                const rate = parseFloat($('#hourlyRate').val());
+
+                if (hours < 0.1 || hours > 744) {
+                    alert('Total hours must be between 0.1 and 744');
+                    e.preventDefault();
+                    return false;
+                }
+
+                if (rate < 1 || rate > 1000) {
+                    alert('Hourly rate must be between R1 and R1000');
+                    e.preventDefault();
+                    return false;
+                }
+
+                return true;
+            });
+
+            calculateTotal();
         });
     </script>
+
+    <style>
+        .is-invalid {
+            border-color: #dc3545;
+        }
+
+        #calculationPreview {
+            background-color: #f8f9fa; 
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
 }
