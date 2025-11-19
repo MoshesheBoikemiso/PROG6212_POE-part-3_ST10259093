@@ -117,7 +117,7 @@ namespace CMCS_Prototype.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                TempData["Success"] = "Claim submitted successfully!";
+                TempData["Success"] = "Claim submitted successfully!";  
                 return RedirectToAction("LecturerDashboard");
             }
             catch (Exception ex)

@@ -26,12 +26,12 @@ namespace CMCS_Prototype.Models
         [Required]
         [Display(Name = "Total Amount (R)")]
         public decimal TotalAmount { get; set; }
-
+        
         public string Status { get; set; } = "Submitted";
 
         [Display(Name = "Submission Date")]
         public DateTime DateSubmissions { get; set; } = DateTime.Now;
-
+         
         [Display(Name = "Additional Notes")]
         public string Notes { get; set; }
 
