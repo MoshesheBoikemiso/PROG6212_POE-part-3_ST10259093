@@ -46,5 +46,5 @@ namespace CMCS_Prototype.Models
         { 
             TotalAmount = TotalHours * HourlyRate;
         }
-    }
+    } 
 }
