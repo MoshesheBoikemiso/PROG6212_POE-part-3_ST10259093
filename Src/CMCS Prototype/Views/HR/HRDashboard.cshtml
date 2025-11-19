@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "HR Dashboard";
+    var stats = ViewBag.Stats as dynamic;
+}
+
+<div class="container">
+    <h2>HR Dashboard <small class="text-muted">Welcome, @ViewBag.UserName!</small></h2>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">@stats.TotalClaims</h5>
+                    <p class="card-text">Total Claims</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">@stats.ApprovedClaims</h5>
+                    <p class="card-text">Fully Approved</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">@stats.PendingClaims</h5>
+                    <p class="card-text">Pending Approval</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">@stats.TotalLecturers</h5>
+                    <p class="card-text">Total Lecturers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="@Url.Action("ApprovedClaims", "HR")" class="btn btn-success">
+                            📋 View Approved Claims
+                        </a>
+                        <a href="@Url.Action("ManageLecturers", "HR")" class="btn btn-info">
+                            👥 Manage Lecturers
+                        </a>
+                        <a href="@Url.Action("ProcessBatchPayments", "HR")" class="btn btn-primary">
+                            💳 Process Batch Payments
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>HR Automation Features</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <strong>✅ Automated Invoice Generation</strong>
+                            <br><small>Generate payment invoices for approved claims</small>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>✅ Batch Payment Processing</strong>
+                            <br><small>Process multiple claims at once</small>
+                        </div>
+                        <div class="list-group-item">
+                            <strong>✅ Lecturer Management</strong>
+                            <br><small>Update lecturer information and contact details</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
