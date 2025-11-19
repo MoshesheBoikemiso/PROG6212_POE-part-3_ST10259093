@@ -155,6 +155,6 @@ namespace CMCS_Prototype.Controllers
             }
 
             return View(lecturer);
-        }
+        } 
     }
 }
