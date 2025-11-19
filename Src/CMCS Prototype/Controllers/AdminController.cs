@@ -48,7 +48,7 @@ namespace CMCS_Prototype.Controllers
         }
 
         [HttpPost]
-        public IActionResult RejectClaim(int id)
+        public IActionResult RejectClaim(int id) 
         {
             var claim = _context.Claims.Find(id);
             if (claim != null)
