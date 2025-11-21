@@ -3,6 +3,11 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
 <div class="container">
     <h2>Welcome, @ViewBag.UserName! <small class="text-muted">(@ViewBag.UserRole)</small></h2>
     <p class="lead">Claims awaiting your action.</p>
@@ -50,7 +55,16 @@
                             <td>
                                 @if (claim.Documents != null && claim.Documents.Any())
                                 {
-                                    <span class="badge bg-info">@claim.Documents.Count</span>
+                                    <div class="btn-group">
+                                        <span class="badge bg-info">@claim.Documents.Count</span>
+                                        @foreach (var doc in claim.Documents)
+                                        {
+                                            <a href="@Url.Action("ViewDocument", "Admin", new { id = doc.DocumentID })"
+                                               class="btn btn-sm btn-outline-info" target="_blank" title="View @doc.FileName">
+                                                📎
+                                            </a>
+                                        }
+                                    </div>
                                 }
                                 else
                                 {

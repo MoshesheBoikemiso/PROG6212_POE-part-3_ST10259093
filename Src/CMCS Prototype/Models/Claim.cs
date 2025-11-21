@@ -21,7 +21,7 @@ namespace CMCS_Prototype.Models
         [Required]
         [Display(Name = "Hourly Rate (R)")]
         [Range(1, 1000, ErrorMessage = "Hourly rate must be between R1 and R1000")]
-        public decimal HourlyRate { get; set; } = 180; // Default rate
+        public decimal HourlyRate { get; set; } = 180; 
 
         [Required]
         [Display(Name = "Total Amount (R)")]

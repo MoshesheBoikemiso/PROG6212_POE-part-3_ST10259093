@@ -30,10 +30,25 @@ namespace CMCS_Prototype.Controllers
                 HttpContext.Session.SetString("UserRole", user.UserRole);
                 HttpContext.Session.SetString("UserName", user.FirstName);
 
-                return RedirectToAction("Dashboard");
+                if (user.UserRole == "HR")
+                {
+                    return RedirectToAction("HRDashboard", "HR");
+                }
+                else if (user.UserRole == "Lecturer")
+                {
+                    return RedirectToAction("LecturerDashboard", "Claim");
+                }
+                else if (user.UserRole == "Coordinator" || user.UserRole == "Manager")
+                {
+                    return RedirectToAction("AdminDashboard", "Admin");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
 
-            ViewBag.Error = "User not found. Try: lecturer@email.com, coordinator@email.com, or manager@email.com";
+            ViewBag.Error = "User not found. Try: lecturer@email.com, coordinator@email.com, manager@email.com, or hr@email.com";
             return View("Index");
         }
 
@@ -46,7 +61,9 @@ namespace CMCS_Prototype.Controllers
 
             var userRole = HttpContext.Session.GetString("UserRole");
 
-            if (userRole == "Lecturer")
+            if (userRole == "HR")
+                return RedirectToAction("HRDashboard", "HR");
+            else if (userRole == "Lecturer")
                 return RedirectToAction("LecturerDashboard", "Claim");
             else if (userRole == "Coordinator" || userRole == "Manager")
                 return RedirectToAction("AdminDashboard", "Admin");
@@ -58,6 +75,42 @@ namespace CMCS_Prototype.Controllers
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Index");
+        }
+
+        public IActionResult CreateHRUser()
+        {
+            if (!_context.Users.Any(u => u.UserRole == "HR"))
+            {
+                var hrUser = new User
+                {
+                    FirstName = "HR",
+                    LastName = "Manager",
+                    Email = "hr@email.com",
+                    UserRole = "HR"
+                };
+
+                _context.Users.Add(hrUser);
+                _context.SaveChanges();
+
+                return Content("HR user created successfully! Email: hr@email.com");
+            }
+
+            return Content("HR user already exists!");
+        }
+
+        public IActionResult GenerateDatabaseScript()
+        {
+            try
+            {
+                var sql = _context.Database.GenerateCreateScript();
+
+                var bytes = System.Text.Encoding.UTF8.GetBytes(sql);
+                return File(bytes, "text/plain", "CMCS-Database-Schema.sql");
+            }
+            catch (Exception ex)
+            {
+                return Content($"Error generating script: {ex.Message}");
+            }
         }
     }
 }
